@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        new_salesforce_case_helper
+// @name		new_salesforce_case_helper
 // @namespace   salesforce.com
 // @include     https://na3.salesforce.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js

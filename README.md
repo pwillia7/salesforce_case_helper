@@ -20,9 +20,7 @@ browser of choice.
 3. If using Chrome, drag *salesforce_case_helper.tamper.js* from the file browser
    into Chrome. 
 
-If you have issues installing - Go to Chromes extensions page, enable the "Allow access to file URLs" checkbox at the
-Tampermonkey item. 
+   If you have issues installing - Go to Chromes extensions page, enable the "Allow access to file URLs" checkbox at the Tampermonkey item. 
 
-If using Firefox, simply drag *salesforce_case_helper.user.js* from the file browser
-into Firefox.
+   If using Firefox, simply drag *salesforce_case_helper.user.js* from the file browser into Firefox.
 ![alt tag](https://raw.github.com/pwillia7/salesforce_case_helper/master/screenshot.png)

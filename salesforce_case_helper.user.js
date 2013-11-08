@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
-// @include     *
+// @include     https://na3.salesforce.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
 // @version     1.2

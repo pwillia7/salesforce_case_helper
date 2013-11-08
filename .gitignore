@@ -1,5 +1,6 @@
 *.un
 *.un~
+.README.md.un~
 *~
 *.swp
 *.swo

@@ -1,0 +1,101 @@
+@charset 'UTF-8';
+.status_negative{
+    padding: 4px;
+    font-weight: 900;
+    font-family: 'Open Sans', sans-serif !important;
+    border-radius: 3px;
+    background: #CD5C5C;
+    border: 2px solid #000000;
+    font-size: 12px;
+}
+
+.status_positive{
+    padding: 4px;
+    font-weight: 900;
+    font-family: 'Open Sans', sans-serif !important;
+    border-radius: 3px;
+    background: palegreen;
+    border: 2px solid #000000;
+    font-size: 12px;
+
+}
+
+.status_important{
+    padding: 4px;
+    font-family: 'Open Sans', sans-serif !important;
+    border-radius: 3px;
+    background: #BDA0CB;
+    border: 2px solid #000000;
+    font-size: 15px;
+}
+.pending{
+    padding: 4px;
+    font-family: 'Open Sans', sans-serif !important;
+    border-radius: 3px;
+    background: #BDA0CB;
+    border: 2px solid #000000;
+}
+
+.beautified_comment{
+    background: #F8F8FF;
+    border: 1px solid #808080 !important;
+    font-family: 'Open Sans', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.5em;
+    padding: 7px;
+}
+.htmlAreaComponentModule {
+    width: 200px; 
+    position: fixed; 
+    z-index: 100;
+}
+
+table.list{
+    width:1200px;
+}
+td.dataCell{
+    word-wrap:break-word;
+    word-break:break-all;
+}
+.infoBarCenter{
+    text-align: center;
+    font-size: 15px;
+    display: inline-block;
+    width: 60%;
+    line-height: 1.3em;
+    margin-top: 3px;
+
+}
+.infoBarLeft{
+    float: left;
+    width: 20%;
+    height: 100%;
+    margin-top: 5px;
+    line-height: 1.3em;
+    margin-left: 2px;
+
+
+}
+.infoBarRight{
+    float: right;
+    width: 19%;
+    text-align: right;
+    height: 100%;
+    margin-right: 2px;
+}
+#infoBar{
+    position: fixed;
+    height: 45px;
+    background: ghostwhite;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    border-bottom: 1px black solid;
+    top: 0;
+    padding: 2px;
+    z-index: 100;
+    padding-top: 4px;
+    display: none;
+}
+body{
+    margin-left: 0 !important;
+}

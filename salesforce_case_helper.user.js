@@ -100,10 +100,12 @@ function Greasemonkey_main() {
 		var slaStatus = document.getElementById('00N50000002Cffz_ileinner').innerHTML;
 		var ttfrStatus = document.getElementById('00N50000002DU7V_ileinner').innerHTML;
 		var contactName = document.getElementById('cas3_ileinner').children[0].innerHTML;
-		if(document.getElementById('cas9_ileinner').innerHTML !== "&nbsp;"){
+		if(document.getElementById('cas9_ileinner').innerHTML.length > 15){
 			contactPhone = document.getElementById('cas9_ileinner').children[0].innerHTML;
 			contactPhone = contactPhone.substr(contactPhone.indexOf('>')+1,1000);
 			contactPhone = contactPhone.substr(0,contactPhone.indexOf('<'));
+		} else if (document.getElementById('cas9_ileinner').innerHTML !== "&nbsp;"){
+			contactPhone = document.getElementById('cas9_ileinner').innerHTML;
 		}
 		if(document.getElementById('00N50000001yzHK_ileinner').innerHTML !== "&nbsp;"){
 			cluster = document.getElementById('00N50000001yzHK_ileinner').innerHTML.toUpperCase();

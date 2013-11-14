@@ -1,6 +1,10 @@
 #Salesforce Case Helper for BV
 This userscript adds various improvements to the Salesforce case view for Bazaarvoice Support
 
+###Recently Added:
+* Script runs only on Support Team Case types
+* Script runs on new comment pages for comment container fix
+
 ###Improvements include:
 
 * Information bar displays on top of screen

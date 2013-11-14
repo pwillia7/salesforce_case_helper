@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
-// @include     https://na3.salesforce.com/*
+// @include     https://na3.salesforce.com/* 
+// @include     https://e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
 // @version     1.2
@@ -10,8 +11,8 @@
 // ==/UserScript==
 var newCSS = GM_getResourceText ("Customcss");
 GM_addStyle (newCSS);
-window.addEventListener("load", Greasemonkey_main, false);
-
+if(document.getElementById('RecordType_ileinner').innerHTML.substr(0,12) === "Support Team"){
+window.addEventListener("load", Greasemonkey_main, false);}
 function Greasemonkey_main() {
 	//load Open Sans font
    var head= document.getElementsByTagName('head')[0];

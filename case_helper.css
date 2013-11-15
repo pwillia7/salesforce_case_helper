@@ -61,7 +61,7 @@ td.dataCell{
     text-align: center;
     font-size: 15px;
     display: inline-block;
-    width: 60%;
+    width: 50%;
     line-height: 1.3em;
     margin-top: 3px;
 
@@ -70,15 +70,13 @@ td.dataCell{
     float: left;
     width: 20%;
     height: 100%;
-    margin-top: 5px;
-    line-height: 1.3em;
     margin-left: 2px;
 
 
 }
 .infoBarRight{
     float: right;
-    width: 19%;
+    width: 29%;
     text-align: right;
     height: 100%;
     margin-right: 2px;

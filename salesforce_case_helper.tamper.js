@@ -67,9 +67,6 @@ function Greasemonkey_main() {
 		//fix container breaking
 		document.getElementById('ep').style.maxWidth = window.innerWidth - 250 + "px";
 		document.getElementById('bodyCell').style.maxWidth = window.innerWidth - 250 + "px";
-
-
-
 	}
 	function updateComments() {
 		var comments = document.getElementsByClassName("dataCell");
@@ -95,7 +92,8 @@ function Greasemonkey_main() {
 	jiraButton.setAttribute("onclick","window.open(\"https://bits.bazaarvoice.com/jira/secure/Dashboard.jspa\",\"_blank\");");
 	document.getElementById("topButtonRow").insertBefore(jiraButton,null);
 	function createInfoBar(){
-		var contactPhone, cluster, csdName, tamName;
+		var contactPhone, cluster, csdName, tamName, caseCreationDate;
+		var currentLocalDate = new Date();
 		var clientName = document.getElementById('cas4_ileinner').childNodes[0].innerHTML;
 		var caseTitle = document.getElementById('cas14_ileinner').innerHTML;
 		var slaStatus = document.getElementById('00N50000002Cffz_ileinner').innerHTML;
@@ -117,9 +115,41 @@ function Greasemonkey_main() {
 		if(document.getElementById('00N50000002D3bq_ileinner').innerHTML !== "&nbsp;"){
 			tamName = document.getElementById('00N50000002D3bq_ileinner').innerHTML;
 		}
+		//If not in CST, convert local time to CST
+		if(new Date().getTimezoneOffset() !== 360){ // if not in central time
+			var currentOffset = new Date().getTimezoneOffset();
+			var cstOffset = 360 - currentOffset; //calculate offset between cst and local time
+			console.log("CST OFFSET "+cstOffset);
+			currentLocalDate =  new Date(currentLocalDate.getFullYear(),currentLocalDate.getMonth(),currentLocalDate.getDate(),currentLocalDate.getHours(),currentLocalDate.getMinutes()-cstOffset,currentLocalDate.getSeconds()); //calculate current central time and set local date to that
+		}
+		// Calculate business days since creation date
+		if(document.getElementById('00N50000002CaYE_ileinner').innerHTML === "&nbsp;"){
+			caseCreationDate = new Date(document.getElementById('CreatedDate_ileinner').innerHTML);
+		} else {
+			caseCreationDate = new Date(document.getElementById('00N50000002CaYE_ileinner').innerHTML);
+		}
+		//calculate business days
+		var iWeeks, iDateDiff, iAdjust = 0;
+        if (currentLocalDate < caseCreationDate) return -1; // error code if dates transposed
+        var iWeekday1 = caseCreationDate.getDay(); // day of week
+        var iWeekday2 = currentLocalDate.getDay();
+        iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+        iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
+        if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+        iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+        iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+        // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+        iWeeks = Math.floor((currentLocalDate.getTime() - caseCreationDate.getTime()) / 604800000);
+        if (iWeekday1 <= iWeekday2) {
+          iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1);
+        } else {
+          iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2);
+        }
+        iDateDiff -= iAdjust; // take into account both days on weekend;
+        //populate infobar
 		document.title = clientName+" - "+cluster+" - "+caseTitle + " - " + document.title.substr(0,14);
 		$('#infoBar').append("<div class='infoBarCenter'>"+clientName+"<br>"+cluster+" - "+caseTitle+"</div>");
-		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"</span><br>TTFR: "+ttfrStatus+"</div>");
+		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>Business Days Open: "+iDateDiff+"</span><br>TTFR: "+ttfrStatus+"</div>");
 		$('#infoBar').append("<div class='infoBarRight'>"+"Contact Name: "+contactName+"<br><img width='16' height='10' src='/img/btn_nodial_inline.gif'> "+contactPhone+"<br>CSD: "+csdName+" - TAM: "+tamName+"</div>");
 		if (document.getElementById('00N50000002Cffz_ileinner').innerHTML !== "IN"){
 			$(".slaStatus").css("color","#CD5C5C");
@@ -127,20 +157,11 @@ function Greasemonkey_main() {
 				$(".slaStatus").css("font-weight","900");
 			}
 		}
-		
-
-
-			
-
 	}
-	
 checkImportantFields();
-
 createInfoBar();
 setTimeout(updateComments,3000);
-
-}
-
+ }
 $(window).scroll(function() {
 if(window.scrollY < 120){
 $('#infoBar').fadeOut();

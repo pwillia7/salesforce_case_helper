@@ -2,6 +2,8 @@
 This userscript adds various improvements to the Salesforce case view for Bazaarvoice Support
 
 ###Recently Added:
+* Add Signature button added to new case comment page
+* Return to case view button added
 * New Business Days Open added to the Info Bar -- works globally
 * Script runs only on Support Team Case types
 * Script runs on new comment pages for comment container fix
@@ -16,7 +18,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 * Updated title for more information while not in tab
   
 ###To install:
-######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. 
+######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. You will also need to define your signature in the script if you wish to use this feature.
 
 1. Clone this repo using git or download the repo in a zip using the link in the right
 pane.

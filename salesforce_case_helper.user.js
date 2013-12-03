@@ -9,8 +9,32 @@
 // @grant		GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
+/*
+
+Define your signature here!!!!
+
+
+\n is a carriage return
+
+*/
+var userSignature = "\n\nBest Regards,\n\nPatrick Williams";
 var newCSS = GM_getResourceText ("Customcss");
 GM_addStyle (newCSS);
+if(document.location.origin === 'https://e2cp.na3.visual.force.com'){
+	window.addEventListener("load", Greasemonkey_main1, false);}
+function Greasemonkey_main1(){
+	var commentRow = document.getElementById('pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:cannedPBSI:cannedOP');
+	var signatureButton = document.createElement('input');
+	signatureButton.id = 'signatureButton';
+	signatureButton.setAttribute('class','btn');
+	signatureButton.setAttribute('type','button');
+	signatureButton.setAttribute('name','signatureButton');
+	signatureButton.setAttribute('value','Add Signature');
+	//signatureButton.setAttribute("onclick","document.getElementById(\"pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea\").value += "+ userSignature +";");
+	commentRow.insertBefore(signatureButton,null);
+	document.getElementById('signatureButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += userSignature;};
+
+}
 if(document.getElementById('RecordType_ileinner').innerHTML.substr(0,12) === "Support Team"){
 window.addEventListener("load", Greasemonkey_main, false);}
 function Greasemonkey_main() {

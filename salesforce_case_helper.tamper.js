@@ -91,6 +91,13 @@ function Greasemonkey_main() {
 	jiraButton.setAttribute("value","New JIRA");
 	jiraButton.setAttribute("onclick","window.open(\"https://bits.bazaarvoice.com/jira/secure/Dashboard.jspa\",\"_blank\");");
 	document.getElementById("topButtonRow").insertBefore(jiraButton,null);
+	var backToCaseButton = document.createElement('input');
+	backToCaseButton.id = "backToCaseButton";
+	backToCaseButton.setAttribute('class','btn');
+	backToCaseButton.setAttribute('type','button');
+	backToCaseButton.setAttribute('value','Back to Cases');
+	backToCaseButton.setAttribute('onclick',"window.location='https://na3.salesforce.com/500?fcf=00B500000064SFq'");
+	document.getElementById('topButtonRow').insertBefore(backToCaseButton,document.getElementById('topButtonRow').children[0]);
 	function createInfoBar(){
 		var contactPhone, cluster, csdName, tamName, caseCreationDate;
 		var currentLocalDate = new Date();

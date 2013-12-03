@@ -16,6 +16,8 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 * Updated title for more information while not in tab
   
 ###To install:
+######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. 
+
 1. Clone this repo using git or download the repo in a zip using the link in the right
 pane.
 

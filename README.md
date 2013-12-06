@@ -1,6 +1,8 @@
 #Salesforce Case Helper for BV
 This userscript adds various improvements to the Salesforce case view for Bazaarvoice Support
 
+######TO INSTALL PLEASE READ THE INSTALL INSTRUCTIONS BELOW!
+
 ###Recently Added:
 * Add Signature button added to new case comment page
 * Return to case view button added
@@ -20,7 +22,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 ###To install:
 ######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. You will also need to define your signature in the script if you wish to use this feature.
 
-1. Clone this repo using git or download the repo in a zip using the link in the right
+1. Download the files - Clone this repo using git or download the repo in a zip using the link in the right
 pane.
 
 2. Make sure you have Greasemonkey (Firefox) or Tampermonkey (Chrome) installed to your

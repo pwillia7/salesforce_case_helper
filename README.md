@@ -20,18 +20,23 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 * Updated title for more information while not in tab
   
 ###To install:
-######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. You will also need to define your signature in the script if you wish to use this feature.
+######ATTENTION - Before you install disable the previous greasemonkey/tampermonkey script from your browser. 
 
-1. Download the files - Clone this repo using git or download the repo in a zip using the link in the right
-pane.
+1.[Download](https://github.com/pwillia7/salesforce_case_helper/archive/master.zip) the files - Clone this repo using git or download the repo in a zip using [this link](https://github.com/pwillia7/salesforce_case_helper/archive/master.zip)
 
-2. Make sure you have Greasemonkey (Firefox) or Tampermonkey (Chrome) installed to your
+2. Open salesforce_case_helper.tamper.js and salesforce_case_helper.user.js in a text
+   editor of your choice and modify the userSignature variable to match your
+signature.
+
+3. Make sure you have Greasemonkey (Firefox) or Tampermonkey (Chrome) installed to your
 browser of choice.
 
-3. If using Chrome, drag *salesforce_case_helper.tamper.js* from the file browser
+4. If using Chrome, drag *salesforce_case_helper.tamper.js* from the file browser
    into Chrome. 
 
    If you have issues installing - Go to Chromes extensions page, enable the "Allow access to file URLs" checkbox at the Tampermonkey item. 
 
    If using Firefox, simply drag *salesforce_case_helper.user.js* from the file browser into Firefox.
+
 ![alt tag](https://raw.github.com/pwillia7/salesforce_case_helper/master/screenshot.png)
+

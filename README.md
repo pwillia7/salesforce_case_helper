@@ -24,7 +24,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 
 [Download](https://github.com/pwillia7/salesforce_case_helper/archive/master.zip) the script- Clone this repo using git or download the repo in a zip using [this link](https://github.com/pwillia7/salesforce_case_helper/archive/master.zip)
 
-You'll also need to have [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) installed to Chrome and [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+You'll also need to have [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) installed to Chrome and [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) installed to Firefox.
 
 
 2. Open salesforce_case_helper.tamper.js and salesforce_case_helper.user.js in a text

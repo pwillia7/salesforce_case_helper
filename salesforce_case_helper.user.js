@@ -18,6 +18,7 @@ Define your signature here!!!!
 
 */
 var userSignature = "\n\nBest Regards,\n\nPatrick Williams";
+var sendToSoftserve = "\n\nexternal communication: No\n\nPlease include a screenshot of the changes and a link to your userbranch's changeset if it's not promoted to staging.\n\nThanks,\n\nPatrick";
 var newCSS = GM_getResourceText ("Customcss");
 GM_addStyle (newCSS);
 if(document.location.origin === 'https://e2cp.na3.visual.force.com'){
@@ -30,8 +31,18 @@ function Greasemonkey_main1(){
 	signatureButton.setAttribute('type','button');
 	signatureButton.setAttribute('name','signatureButton');
 	signatureButton.setAttribute('value','Add Signature');
-	//signatureButton.setAttribute("onclick","document.getElementById(\"pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea\").value += "+ userSignature +";");
+
+	var softserveButton = document.createElement('input');
+	softserveButton.id = 'softserveButton';
+	softserveButton.setAttribute('class','btn');
+	softserveButton.setAttribute('type','button');
+	softserveButton.setAttribute('name','sendToSoftserve');
+	softserveButton.setAttribute('value','SS Signature');
+
 	commentRow.insertBefore(signatureButton,null);
+	commentRow.insertBefore(softserveButton,null);
+
+	document.getElementById('softserveButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += sendToSoftserve;};
 	document.getElementById('signatureButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += userSignature;};
 
 }
@@ -105,7 +116,7 @@ function Greasemonkey_main() {
 	var infoBar = document.createElement("div");
 	infoBar.id = "infoBar";
 	document.getElementsByTagName('body')[0].appendChild(infoBar);
-	infoBar.style.width = window.innerWidth -6 + "px";
+	infoBar.style.width = "99%";
 	//create and add JIRA button
 	var jiraButton = document.createElement("input");
 	jiraButton.id = "jiraButton";
@@ -193,10 +204,12 @@ checkImportantFields();
 createInfoBar();
 setTimeout(updateComments,3000);
  }
+
+ 
 $(window).scroll(function() {
 if(window.scrollY < 120){
 $('#infoBar').fadeOut();
 } else{
-$('#infoBar').fadeIn();
+$('#infoBar').slideDown();
 }
 });

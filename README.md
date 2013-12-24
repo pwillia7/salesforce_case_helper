@@ -4,9 +4,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 ######TO INSTALL PLEASE READ THE INSTALL INSTRUCTIONS BELOW!
 
 ###Recently Added:
-* Add Signature button added to new case comment page
-* Return to case view button added
-* New Business Days Open added to the Info Bar -- works globally
+* Signature and SoftServe button added to new case comment page
 * Script runs only on Support Team Case types
 * Script runs on new comment pages for comment container fix
 
@@ -14,6 +12,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 
 * Information bar displays on top of screen
 * Floating WorkIt! Time Tracking
+* New Business Days Open added to the Info Bar -- works globally
 * Fixed broken comments container issue for long links
 * Improved readability and highlighting of important fields
 * JIRA button

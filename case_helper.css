@@ -89,9 +89,8 @@ td.dataCell{
     font-family: 'Open Sans', sans-serif;
     border-bottom: 1px black solid;
     top: 0;
-    padding: 2px;
+    padding: 5px 2px;
     z-index: 100;
-    padding-top: 4px;
     display: none;
 }
 body{

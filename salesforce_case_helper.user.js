@@ -5,7 +5,7 @@
 // @include     https://e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
-// @version     1.3
+// @version     1.2
 // @grant		GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -246,7 +246,7 @@ var updateCommentsInterval = setInterval(function(){
 	try{
 		updateComments();
 		clearInterval(updateCommentsInterval);
-	} catch(e){}},500);
+	} catch(e){}},1200);
 
 }//end block
 

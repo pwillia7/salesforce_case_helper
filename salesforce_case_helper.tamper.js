@@ -112,14 +112,65 @@ function Greasemonkey_main() {
 		document.getElementById('bodyCell').style.maxWidth = window.innerWidth - 250 + "px";
 		document.getElementById('cas15_ileinner').style.maxWidth = window.innerWidth - 250 + "px";
 	}
-
+		var placeDiv = true;
 	//updates case comments to be more readable
 	function updateComments() {
+		var viewImages = "javascript:RelatedList.get('" + document.location.pathname.substr(1) + "_RelatedAttachmentList').showXMore(100)";
+		var hiddenBtn = document.createElement('a');
+		hiddenBtn.id = "hiddenBtn";
+		hiddenBtn.href = viewImages;
+		hiddenBtn.style.visibility = "hidden";
+		if(placeDiv === true){
+			document.getElementById('sessiontimeout').insertBefore(hiddenBtn,null);
+			placeDiv = false;
+		}
+		hiddenBtn.click();
+	/*	var description = document.getElementById('cas15_ileinner').innerHTML;
+		var creationDate = document.getElementById('CreatedDate_ileinner').innerHTML;
+		if(description.indexOf('[cid:')!= -1){
+			var descnumOccurs = description.split('[cid:').length -1;
+				for(var z = 0; z <= descnumOccurs; z++){
+				var descimagePos = description.indexOf('[cid:');
+				var descimagePosEnd = description.indexOf(']',descimagePos);
+				var descstr = description.substr(descimagePos,descimagePosEnd-descimagePos+1);
+				var descimageName = descstr.substr(descstr.indexOf(':')+1,descstr.indexOf('@')-descstr.indexOf(':')-1);
+				var adjusteddescimageName = descimageName.split('<a href=\"mailto:').pop();
+				console.log(description.indexOf(descstr));
+				var descanchors = document.getElementsByTagName('a');
+				for(var ay = 0; ay <= descanchors.length; ay++){
+					if(descanchors[ay].title.indexOf(adjusteddescimageName) != -1 && descanchors[ay].target === "_blank" && descanchors[ay].parentNode.parentNode.children[4].innerHTML === creationDate){
+							console.log(ay);
+							var descimageSrc = descanchors[ay].href;
+							description = description.replace(descstr,"<div style='max-width:100%'><a target='_blank' href='"+descimageSrc+"'><img style='max-width:100%' src='"+descimageSrc+"'></a></div>");
+						}
+					}
+		}}*/
 		var comments = document.getElementsByClassName("dataCell");
-		//beautify comments
+		//beautify comments & add images
 		for (var i = 0; i < comments.length; i++){
 			if (comments[i].innerHTML.substr(0,14) === "<b>Created By:"){
-			comments[i].className += " beautified_comment";
+				comments[i].className += " beautified_comment";
+				//get Date of Comment
+				var dateStart = comments[i].innerHTML.indexOf('(')+1;
+				var dateLength = comments[i].innerHTML.indexOf(')') - dateStart;
+				var commentDate = comments[i].innerHTML.substr(dateStart,dateLength);
+				if(comments[i].innerHTML.indexOf('[cid:')!= -1){ //change to while?
+					var numOccurs = comments[i].innerHTML.split('[cid:').length -1;
+					for(var k = 0; k <= numOccurs; k++){
+					var imagePos = comments[i].innerHTML.indexOf('[cid:');
+					var imagePosEnd = comments[i].innerHTML.indexOf(']',imagePos);
+					var str = comments[i].innerHTML.substr(imagePos,imagePosEnd-imagePos+1);
+					var imageName = str.substr(str.indexOf(':')+1,str.indexOf('@')-str.indexOf(':')-1);
+					console.log(imageName);
+					var anchors = document.getElementsByTagName('a');
+					for(var j = 0; j < anchors.length; j++){
+						if(anchors[j].title.indexOf(imageName) != -1 && anchors[j].target === "_blank" && anchors[j].parentNode.parentNode.children[4].innerHTML === commentDate){
+							var imageSrc = anchors[j].href;
+							comments[i].innerHTML = comments[i].innerHTML.replace(str,"<div style='max-width:100%'><a target='_blank' href='"+imageSrc+"'><img style='max-width:100%' src='"+imageSrc+"'></a></div>");
+						}
+					}
+					
+				}}
 			}
 		}
 	}
@@ -242,11 +293,16 @@ var infoBarInterval = setInterval(function(){
 	} catch(e){}},500);
 
 //try to update comments until successful
+//window.onload = setTimeout(updateComments,1200);
+var intCount = 0;
 var updateCommentsInterval = setInterval(function(){
-	try{
-		updateComments();
+	updateComments();
+	console.log('running.... ' + intCount);
+	intCount++;
+	if(document.getElementsByClassName('dataCell').length > 25 || intCount === 30){
 		clearInterval(updateCommentsInterval);
-	} catch(e){}},1200);
+	}
+	},100);
 
 }//end block
 

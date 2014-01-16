@@ -4,6 +4,7 @@ This userscript adds various improvements to the Salesforce case view for Bazaar
 ######TO INSTALL PLEASE READ THE INSTALL INSTRUCTIONS BELOW!
 
 ###Recently Added:
+* Inline comment & description images!
 * Signature and SoftServe button added to new case comment page
 * Script runs only on Support Team Case types
 * Script runs on new comment pages for comment container fix

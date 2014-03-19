@@ -69,7 +69,6 @@ function Greasemonkey_main() {
 		var natureOfIssueField = document.getElementById('00N50000002D2N9_ileinner');
 		var rootCauseField = document.getElementById('00N50000002AgSu_ileinner');
 		var relatedProductField = document.getElementById('00N50000002D2Rp_ileinner');
-		var supportNotes = document.getElementById('00N50000001yx07_ileinner');
 		var caseNotes = document.getElementById('00N50000002AHM3_ileinner');
 		//update nature of issue, root cause, and related product fields
 		if (natureOfIssueField.innerHTML === "&nbsp;") {
@@ -95,10 +94,7 @@ function Greasemonkey_main() {
 		} else {
 			$('#cas7_ileinner').addClass("status_positive");
 		}
-		//update support notes
-		if (supportNotes.innerHTML !== ""){
-			$('#00N50000001yx07_ileinner').addClass("status_important");
-		}
+		
 		//update case notes
 		if (caseNotes.innerHTML !== "&nbsp;"){
 			$('#00N50000002AHM3_ileinner').addClass("status_important");
@@ -106,7 +102,6 @@ function Greasemonkey_main() {
 		//update last comment, contact name, description
 		$("#cas3_ileinner").addClass("beautified_comment");
 		$("#cas15_ileinner").addClass("beautified_comment");
-		$("#00N50000002CVE4_ileinner").addClass("beautified_comment");
 		//fix container breaking
 		document.getElementById('ep').style.maxWidth = window.innerWidth - 250 + "px";
 		document.getElementById('bodyCell').style.maxWidth = window.innerWidth - 250 + "px";
@@ -126,9 +121,7 @@ function Greasemonkey_main() {
 				var descimageName = descstr.substr(descstr.indexOf(':')+1,descstr.indexOf('@')-descstr.indexOf(':')-1);
 				var adjusteddescimageName = descimageName.split('<a href=\"mailto:').pop();
 				var descanchors = document.getElementsByClassName('actionLink');
-				console.log(descanchors.length+'1!!!');
 				for(var w = 0; w <= descanchors.length; w++){
-					console.log(adjusteddescimageName);
 					if(descanchors[w].title.indexOf(adjusteddescimageName) != -1 && descanchors[w].target === "_blank" && descanchors[w].parentNode.parentNode.children[4].innerHTML === creationDate){
 							console.log('something fit this desc');
 							var descimageSrc = descanchors[w].href;
@@ -204,10 +197,11 @@ function Greasemonkey_main() {
 	function createInfoBar(){
 		var contactPhone, cluster, csdName, tamName, caseCreationDate;
 		var currentLocalDate = new Date();
-		var clientName = document.getElementById('cas4_ileinner').childNodes[0].innerHTML;
+		var clientName = document.getElementById('cas3_ileinner').childNodes[0].innerHTML;
 		var caseTitle = document.getElementById('cas14_ileinner').innerHTML;
 		var slaStatus = document.getElementById('00N50000002Cffz_ileinner').innerHTML;
-		var ttfrStatus = document.getElementById('00N50000002DU7V_ileinner').innerHTML;
+		// FIX THIS! NEEDS MATHS TO DETERMINE IF IN OR OUT
+		var bvTime = document.getElementById('00N50000002yQKN_ileinner').innerHTML;
 		var contactName = document.getElementById('cas3_ileinner').children[0].innerHTML;
 		if(document.getElementById('cas9_ileinner').innerHTML.length > 15){
 			contactPhone = document.getElementById('cas9_ileinner').children[0].innerHTML;
@@ -282,7 +276,7 @@ function Greasemonkey_main() {
         //add data to infobar
 		document.title = clientName+" - "+cluster+" - "+caseTitle + " - " + document.title.substr(0,14);
 		$('#infoBar').append("<div class='infoBarCenter'>"+clientName+"<br>"+cluster+" - "+caseTitle+"</div>");
-		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>"+TTCRInfo+"</span><br>TTFR: "+ttfrStatus+"</div>");
+		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>"+TTCRInfo+"</span><br>Time with BV: "+bvTime+" hrs</div>");
 		$('#infoBar').append("<div class='infoBarRight'>"+"Contact Name: "+contactName+"<br><img width='16' height='10' src='/img/btn_nodial_inline.gif'> "+contactPhone+"<br>CSD: "+csdName+" - TAM: "+tamName+"</div>");
 		if (slaStatus !== "IN"){
 			$(".slaStatus").css("color","#CD5C5C");
@@ -309,7 +303,7 @@ var updateCommentsInterval = setInterval(function(){
 	updateComments();
 	descriptionImage();
 	intCount++;
-	if(document.getElementsByClassName('beautified_comment').length > 3 || intCount === 10){
+	if(document.getElementsByClassName('beautified_comment').length > 3 || intCount === 12){
 		clearInterval(updateCommentsInterval);
 	}
 	},100);

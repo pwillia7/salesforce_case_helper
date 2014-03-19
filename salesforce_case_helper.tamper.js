@@ -247,11 +247,9 @@ function Greasemonkey_main() {
 				currentLocalDate =  new Date(currentLocalDate.getFullYear(),currentLocalDate.getMonth(),currentLocalDate.getDate(),currentLocalDate.getHours(),currentLocalDate.getMinutes()-cstOffset,currentLocalDate.getSeconds()); //calculate current central time and set local date to that
 			}
 			// Calculate business days since creation date
-			if(document.getElementById('00N50000002CaYE_ileinner').innerHTML === "&nbsp;"){
+			
 				caseCreationDate = new Date(document.getElementById('CreatedDate_ileinner').innerHTML);
-			} else {
-				caseCreationDate = new Date(document.getElementById('00N50000002CaYE_ileinner').innerHTML);
-			}
+			
 			var iWeeks, iAdjust = 0;
 			if (currentLocalDate < caseCreationDate) return -1; // error code if dates transposed
 			var iWeekday1 = caseCreationDate.getDay(); // day of week

@@ -197,7 +197,7 @@ function Greasemonkey_main() {
 	function createInfoBar(){
 		var contactPhone, cluster, csdName, tamName, caseCreationDate;
 		var currentLocalDate = new Date();
-		var clientName = document.getElementById('cas3_ileinner').childNodes[0].innerHTML;
+		var clientName = document.getElementById('cas4_ileinner').childNodes[0].innerHTML;
 		var caseTitle = document.getElementById('cas14_ileinner').innerHTML;
 		var slaStatus = document.getElementById('00N50000002Cffz_ileinner').innerHTML;
 		// FIX THIS! NEEDS MATHS TO DETERMINE IF IN OR OUT

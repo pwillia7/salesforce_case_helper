@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
-// @include     https://na3.salesforce.com/* 
-// @include     https://e2cp.na3.visual.force.com/*
+// @include     https://bazaarvoice1.my.salesforce.com/* 
+// @include     https://bazaarvoice1--e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
 // @version     1.2
@@ -25,7 +25,7 @@ var newCSS = GM_getResourceText ("Customcss");
 
 //this block runs on all salesforce case pages and all new comments page. Fixes word wrap issue, adds signature buttons and floats WorkIt!
 GM_addStyle (newCSS);
-if(document.location.origin === 'https://e2cp.na3.visual.force.com'){
+if(document.location.origin === 'https://bazaarvoice1--e2cp.na3.visual.force.com'){
 	window.addEventListener("load", Greasemonkey_main1, false);}
 function Greasemonkey_main1(){
 	var commentRow = document.getElementById('pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:cannedPBSI:cannedOP');

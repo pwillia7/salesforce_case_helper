@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
-// @include     https://na3.salesforce.com/* 
-// @include     https://e2cp.na3.visual.force.com/*
+// @include     https://bazaarvoice1.my.salesforce.com/* 
+// @include     https://bazaarvoice1--e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
-// @version     1.2
+// @version     1.3
 // @grant		GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -17,15 +17,15 @@ Define your SoftServe Signature in the sendToSoftserve variable
 \n is a carriage return (Enter/Return)
 
 */
-var userSignature = "\n\nBest Regards,\n\nPatrick Williams";
-var sendToSoftserve = "\n\nexternal communication: No\n\nPlease include a screenshot of the changes and a link to your userbranch's changeset if it's not promoted to staging.\n\nThanks,\n\nPatrick";
+var userSignature = "Best regards,\nBob Weilbaecher | Technical Success Manager | 512.551.6818\n\n———\nIf you have a critical issue at any time of day or night - defined as a total outage of submission or display on production - please call our support hotline at 866-522-9227 (choose option 4) and someone will assist you.";
+var sendToSoftserve = "\n\nexternal communication: No\n\nPlease include a screenshot of the changes and a link to your userbranch's changeset if it's not promoted to staging.\n\nThanks,\n\nBob";
 
 
 var newCSS = GM_getResourceText ("Customcss");
 
 //this block runs on all salesforce case pages and all new comments page. Fixes word wrap issue, adds signature buttons and floats WorkIt!
 GM_addStyle (newCSS);
-if(document.location.origin === 'https://e2cp.na3.visual.force.com'){
+if(document.location.origin === 'https://bazaarvoice1--e2cp.na3.visual.force.com'){
 	window.addEventListener("load", Greasemonkey_main1, false);}
 function Greasemonkey_main1(){
 	var commentRow = document.getElementById('pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:cannedPBSI:cannedOP');
@@ -60,7 +60,7 @@ function Greasemonkey_main() {
    var script= document.createElement('link');
    script.rel = 'stylesheet';
    script.type= 'text/css';
-   script.href= 'http://fonts.googleapis.com/css?family=Open+Sans:400,600';
+   script.href= 'https://fonts.googleapis.com/css?family=Open+Sans:400,600';
    head.appendChild(script); //end font
 
    //This function updates the important fields with color depending on their values
@@ -69,8 +69,13 @@ function Greasemonkey_main() {
 		var natureOfIssueField = document.getElementById('00N50000002D2N9_ileinner');
 		var rootCauseField = document.getElementById('00N50000002AgSu_ileinner');
 		var relatedProductField = document.getElementById('00N50000002D2Rp_ileinner');
+        var accountSupportGroupField = document.getElementById('00N50000003fP3z_ileinner');
+		var primaryTSMConversationsField = document.getElementById('00N50000009s6XR_ileinner');
+		var primaryTSMPRRField = document.getElementById('00N50000009s6XW_ileinner');
+        var caseOriginField = document.getElementById('cas11_ileinner');
 		var caseNotes = document.getElementById('00N50000002AHM3_ileinner');
 		//update nature of issue, root cause, and related product fields
+        console.log('Checking fields . . .');
 		if (natureOfIssueField.innerHTML === "&nbsp;") {
 			$("#00N50000002D2N9_ileinner").addClass("status_negative");
 		}else{
@@ -81,10 +86,27 @@ function Greasemonkey_main() {
 		} else {
 			$('#00N50000002AgSu_ileinner').addClass("status_positive");
 		}
-		if (relatedProductField.innerHTML === "&nbsp;") {
-			$("#00N50000002D2Rp_ileinner").addClass("status_negative");
+        if (caseOriginField.innerHTML === "&nbsp;") {
+			$("#cas11_ileinner").addClass("status_negative");
 		} else {
-			$("#00N50000002D2Rp_ileinner").addClass("status_positive");
+			console.log('Case Origin is present');
+		}
+        console.log('primaryTSMConversationsField.innerHTML = *',primaryTSMConversationsField.innerHTML,'* it is ',primaryTSMConversationsField.innerHTML.length,' character(s) long');
+		if (primaryTSMConversationsField.innerHTML === " ") {
+			console.log('No Primary Conversations TSM');
+		} else {
+			$('#00N50000009s6XR_ileinner').addClass("status_positive");
+		}
+        console.log('primaryTSMPRRField.innerHTML = *',primaryTSMPRRField.innerHTML,'* it is ',primaryTSMPRRField.innerHTML.length,' character(s) long');
+		if (primaryTSMPRRField.innerHTML === " ") {
+			console.log('No Primary PRR TSM');
+		} else {
+			$('#00N50000009s6XW_ileinner').addClass("status_positive");
+		}
+		if (accountSupportGroupField.innerHTML === "&nbsp;") {
+			$("#00N50000003fP3z_ileinner").addClass("status_negative");
+		} else {
+			$("#00N50000003fP3z_ileinner").addClass("status_positive");
 		}
 		//update status
 		if (status === "New" || status === "In Progress" || status === "Assigned") {
@@ -94,7 +116,6 @@ function Greasemonkey_main() {
 		} else {
 			$('#cas7_ileinner').addClass("status_positive");
 		}
-		
 		//update case notes
 		if (caseNotes.innerHTML !== "&nbsp;"){
 			$('#00N50000002AHM3_ileinner').addClass("status_important");
@@ -125,7 +146,6 @@ function Greasemonkey_main() {
 					if(descanchors[w].title.indexOf(adjusteddescimageName) != -1 && descanchors[w].target === "_blank" && descanchors[w].parentNode.parentNode.children[4].innerHTML === creationDate){
 							console.log('something fit this desc');
 							var descimageSrc = descanchors[w].href;
-							
 							document.getElementById('cas15_ileinner').innerHTML = document.getElementById('cas15_ileinner').innerHTML.replace(descstr,"<div style='max-width:100%'><a target='_blank' href='"+descimageSrc+"'><img style='max-width:100%' src='"+descimageSrc+"'></a></div>");
 						}
 					}
@@ -149,7 +169,6 @@ function Greasemonkey_main() {
 		//beautify comments & add images
 		for (var i = 0; i < comments.length; i++){
 			if (comments[i].innerHTML.substr(0,14) === "<b>Created By:"){
-				
 				comments[i].className += " beautified_comment";
 				//get Date of Comment
 				var dateStart = comments[i].innerHTML.indexOf('(')+1;
@@ -171,18 +190,16 @@ function Greasemonkey_main() {
 							comments[i].innerHTML = comments[i].innerHTML.replace(str,"<div style='max-width:100%'><a target='_blank' href='"+imageSrc+"'><img style='max-width:100%' src='"+imageSrc+"'></a></div>");
 						}
 					}
-					
 				}}
 			}
 		}
 	}
-	
 	//create infobar container
 	var infoBar = document.createElement("div");
 	infoBar.id = "infoBar";
 	document.getElementsByTagName('body')[0].appendChild(infoBar);
 	infoBar.style.width = "99%";
-
+    infoBar.style.height = "55px";
 	//create and add JIRA button
 	var jiraButton = document.createElement("input");
 	jiraButton.id = "jiraButton";
@@ -226,7 +243,7 @@ function Greasemonkey_main() {
 		milestoneBodyID = milestoneListID.substr(0,milestoneListID.length-4);
 		milestoneBodyID += "body";
 		if(document.getElementById(milestoneBodyID).children[0].children[0].children[0].children[0].innerHTML !== "No records to display"){
-			milestoneTTCR = document.getElementById(milestoneBodyID).children[0].children[0].children[1].children[3].innerHTML;
+			milestoneTTCR = document.getElementById(milestoneBodyID).children[0].children[0].children[2].children[3].innerHTML;
 		}
 		//if there is a milestone, add remaining time or TTFR time to infobar
 		if(milestoneTTCR !== undefined){
@@ -274,7 +291,7 @@ function Greasemonkey_main() {
         //add data to infobar
 		document.title = clientName+" - "+cluster+" - "+caseTitle + " - " + document.title.substr(0,14);
 		$('#infoBar').append("<div class='infoBarCenter'>"+clientName+"<br>"+cluster+" - "+caseTitle+"</div>");
-		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>"+TTCRInfo+"</span><br>Time with BV: "+bvTime+" hrs</div>");
+		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>"+TTCRInfo+"</span><br>Version 1.3</div>");
 		$('#infoBar').append("<div class='infoBarRight'>"+"Contact Name: "+contactName+"<br><img width='16' height='10' src='/img/btn_nodial_inline.gif'> "+contactPhone+"<br>CSD: "+csdName+" - TAM: "+tamName+"</div>");
 		if (slaStatus !== "IN"){
 			$(".slaStatus").css("color","#CD5C5C");

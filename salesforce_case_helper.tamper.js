@@ -5,7 +5,7 @@
 // @include     https://bazaarvoice1--e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource	Customcss case_helper.css 
-// @version     1.3
+// @version     1.4
 // @grant		GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
@@ -17,9 +17,9 @@ Define your SoftServe Signature in the sendToSoftserve variable
 \n is a carriage return (Enter/Return)
 
 */
-var userSignature = "Best regards,\nBob Weilbaecher | Technical Success Manager | 512.551.6818\n\n———\nIf you have a critical issue at any time of day or night - defined as a total outage of submission or display on production - please call our support hotline at 866-522-9227 (choose option 4) and someone will assist you.";
-var sendToSoftserve = "\n\nexternal communication: No\n\nPlease include a screenshot of the changes and a link to your userbranch's changeset if it's not promoted to staging.\n\nThanks,\n\nBob";
-
+var userSignature = "Best regards,\nFirstName LastName | Technical Success Manager | 512.551.XXXX\n\n———\nIf you have a critical issue at any time of day or night - defined as a total outage of submission or display on production - please call our support hotline at 866-522-9227 (choose option 4) and someone will assist you.";
+var sendToSoftserve = "Hello SoftServe,\n\nbenchname, PRR/C13, Cluster Prod/Staging, Display code (if applicable)\n\nExternal Communication no\n\nThanks!";
+var closeSignature = "\nThanks,\nFirstName LastName\nTechnical Success Manager\no: 512.551.XXXX\n\nNote on Closed cases: replies to Closed cases do not alert the case owner.  If you have any follow up questions please open a new case and reference this case number (xxxxxxxx).";
 
 var newCSS = GM_getResourceText ("Customcss");
 
@@ -43,12 +43,20 @@ function Greasemonkey_main1(){
 	softserveButton.setAttribute('name','sendToSoftserve');
 	softserveButton.setAttribute('value','SS Signature');
 
+	var closeButton = document.createElement('input');
+	closeButton.id = 'closeButton';
+	closeButton.setAttribute('class','btn');
+	closeButton.setAttribute('type','button');
+	closeButton.setAttribute('name','closeButton');
+	closeButton.setAttribute('value','Closing Signature');
+
 	commentRow.insertBefore(signatureButton,null);
 	commentRow.insertBefore(softserveButton,null);
+    commentRow.insertBefore(closeButton,null);
 
 	document.getElementById('softserveButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += sendToSoftserve;};
 	document.getElementById('signatureButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += userSignature;};
-
+	document.getElementById('closeButton').onclick = function(){document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += closeSignature;};
 }//end block
 
 //This block will run on all Support Case Types
@@ -74,6 +82,7 @@ function Greasemonkey_main() {
 		var primaryTSMPRRField = document.getElementById('00N50000009s6XW_ileinner');
         var caseOriginField = document.getElementById('cas11_ileinner');
 		var caseNotes = document.getElementById('00N50000002AHM3_ileinner');
+        var supportNotes = document.getElementById('00N50000001yx07_ileinner');
 		//update nature of issue, root cause, and related product fields
         console.log('Checking fields . . .');
 		if (natureOfIssueField.innerHTML === "&nbsp;") {
@@ -119,6 +128,10 @@ function Greasemonkey_main() {
 		//update case notes
 		if (caseNotes.innerHTML !== "&nbsp;"){
 			$('#00N50000002AHM3_ileinner').addClass("status_important");
+		}
+        //update Support notes
+		if (supportNotes.innerHTML !== ""){
+			$('#00N50000001yx07_ileinner').addClass("status_important");
 		}
 		//update last comment, contact name, description
 		$("#cas3_ileinner").addClass("beautified_comment");
@@ -217,14 +230,9 @@ function Greasemonkey_main() {
 		var clientName = document.getElementById('cas4_ileinner').childNodes[0].innerHTML;
 		var caseTitle = document.getElementById('cas14_ileinner').innerHTML;
 		var slaStatus = document.getElementById('00N50000002Cffz_ileinner').innerHTML;
-		// FIX THIS! NEEDS MATHS TO DETERMINE IF IN OR OUT
 		var bvTime = document.getElementById('00N50000002yQKN_ileinner').innerHTML;
 		var contactName = document.getElementById('cas3_ileinner').children[0].innerHTML;
-		if(document.getElementById('cas9_ileinner').innerHTML.length > 15){
-			contactPhone = document.getElementById('cas9_ileinner').children[0].innerHTML;
-			contactPhone = contactPhone.substr(contactPhone.indexOf('>')+1,1000);
-			contactPhone = contactPhone.substr(0,contactPhone.indexOf('<'));
-		} else if (document.getElementById('cas9_ileinner').innerHTML !== "&nbsp;"){
+		if (document.getElementById('cas9_ileinner').innerHTML !== "&nbsp;"){
 			contactPhone = document.getElementById('cas9_ileinner').innerHTML;
 		}
 		if(document.getElementById('00N50000001yzHK_ileinner').innerHTML !== "&nbsp;"){
@@ -238,70 +246,52 @@ function Greasemonkey_main() {
 		}
 
 		//check for milestone
-		var iDateDiff, milestoneTTCR, TTCRInfo, milestoneBodyID;
+		var iDateDiff, milestoneTTCR, TTCRStatus, milestoneTTFR, TTFRStatus, milestoneTTSR, TTSRStatus, TTCRInfo, TTFRInfo, TTSRInfo, milestoneBodyID;
+        var timeTitle = [];
+        var timeRemain = [];
+        var timeStatus = [];
+        var milestoneArray = [];
 		var milestoneListID = document.getElementsByClassName('listHoverLinks')[0].children[0].id;
 		milestoneBodyID = milestoneListID.substr(0,milestoneListID.length-4);
 		milestoneBodyID += "body";
 		if(document.getElementById(milestoneBodyID).children[0].children[0].children[0].children[0].innerHTML !== "No records to display"){
-			milestoneTTCR = document.getElementById(milestoneBodyID).children[0].children[0].children[2].children[3].innerHTML;
-		}
-		//if there is a milestone, add remaining time or TTFR time to infobar
-		if(milestoneTTCR !== undefined){
-			TTCRInfo = "Time Remaining: ";
-			TTCRInfo += milestoneTTCR;
-			if(milestoneTTCR === "00:00"){
-				slaStatus = "OUT";
-			} else if(milestoneTTCR.substr(0,milestoneTTCR.length -3) < 17){
-				slaStatus = "ALMOST";
-			} else {
-				slaStatus = "IN";
-			}
-        } else{ //if no milestones, calculate business days open
-			//convert user to central time
-			if(new Date().getTimezoneOffset() !== 360){ // if not in central time
-				var currentOffset = new Date().getTimezoneOffset();
-				var cstOffset = 360 - currentOffset; //calculate offset between cst and local time
-				currentLocalDate =  new Date(currentLocalDate.getFullYear(),currentLocalDate.getMonth(),currentLocalDate.getDate(),currentLocalDate.getHours(),currentLocalDate.getMinutes()-cstOffset,currentLocalDate.getSeconds()); //calculate current central time and set local date to that
-			}
-			// Calculate business days since creation date
-			
-				caseCreationDate = new Date(document.getElementById('CreatedDate_ileinner').innerHTML);
-			
-			var iWeeks, iAdjust = 0;
-			if (currentLocalDate < caseCreationDate) return -1; // error code if dates transposed
-			var iWeekday1 = caseCreationDate.getDay(); // day of week
-			var iWeekday2 = currentLocalDate.getDay();
-			iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
-			iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
-			if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
-			iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
-			iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
-			// calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
-			iWeeks = Math.floor((currentLocalDate.getTime() - caseCreationDate.getTime()) / 604800000);
-			if (iWeekday1 <= iWeekday2) {
-				iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1);
-			} else {
-				iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2);
-			}
-			iDateDiff -= iAdjust; // take into account both days on weekend;
-			iDateDiff += " Business Days Open";
-			TTCRInfo = "TTCR: ";
-			TTCRInfo += iDateDiff;
-			}
+            var children = document.getElementById(milestoneBodyID).children[0].children[0].children;
+            for (var i = 0,len=children.length; i < len; i++) {
+                milestoneArray[i] = children[i];
+                // Do stuff
+                console.log('Milestone: ',milestoneArray[i].children[1].innerText,' Time Remaining: ',milestoneArray[i].children[3].innerHTML);
+                timeTitle[i] = milestoneArray[i].children[1].innerText;
+                timeRemain[i] = milestoneArray[i].children[3].innerHTML;
+                console.log("6th column(violation): ",$(milestoneArray[i].children[5].children[0]).attr('title'));
+                console.log("7th column(completed): ",$(milestoneArray[i].children[6].children[0]).attr('title'));
+                if(timeRemain[i] !== undefined){
+                    if(timeRemain[i] === "00:00" && $(milestoneArray[i].children[5].children[0]).attr('title') !== ""){
+                        timeStatus[i] = "OUT";
+                    } else if(timeRemain[i] === "00:00" && $(milestoneArray[i].children[5].children[0]).attr('title') === ""){
+                        timeStatus[i] = "COMPLETED";
+                    } else if(timeRemain[i].substr(0,timeRemain[i].length -3) < 17){
+                        timeStatus[i] = "ALMOST";
+                    } else {
+                        timeStatus[i] = "IN";
+                    }
+                }
+            }
+        }
         //add data to infobar
-		document.title = clientName+" - "+cluster+" - "+caseTitle + " - " + document.title.substr(0,14);
 		$('#infoBar').append("<div class='infoBarCenter'>"+clientName+"<br>"+cluster+" - "+caseTitle+"</div>");
-		$('#infoBar').append("<div class='infoBarLeft'> <span class='slaStatus'>"+"SLA Status: "+slaStatus+"<br>"+TTCRInfo+"</span><br>Version 1.3</div>");
+        var timeInfo = "<div class='infoBarLeft'>";
+        for (var j = 1, leng = timeTitle.length;j<leng;j++){
+            timeInfo+="<span>"+timeTitle[j]+": "+timeRemain[j]+"  Status: </span><span class='"+timeStatus[j]+"'>"+timeStatus[j]+"</span></br>";
+        }
+        timeInfo+="</div>";
+		$('#infoBar').append(timeInfo);
 		$('#infoBar').append("<div class='infoBarRight'>"+"Contact Name: "+contactName+"<br><img width='16' height='10' src='/img/btn_nodial_inline.gif'> "+contactPhone+"<br>CSD: "+csdName+" - TAM: "+tamName+"</div>");
-		if (slaStatus !== "IN"){
-			$(".slaStatus").css("color","#CD5C5C");
-			if (slaStatus === "OUT"){
-				$(".slaStatus").css("font-weight","900");
-			}
-		}
+		$(".ALMOST").css("color","#CD5C5C");
+        $(".COMPLETED").css("color","#00FF00");
+        $(".OUT").css("color","#CD5C5C");
+        $(".OUT").css("font-weight","900");
 	} //end createInfoBar
 		
-
 checkImportantFields();
 
 //try to populate infoBar until successful

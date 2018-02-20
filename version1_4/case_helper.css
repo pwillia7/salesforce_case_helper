@@ -40,9 +40,9 @@
     background: #F8F8FF;
     border: 1px solid #808080 !important;
     font-family: 'Open Sans', sans-serif !important;
-    font-size: 15px;
+    font-size: 15px !important;
     line-height: 1.5em;
-    padding: 7px!important;
+    padding: 7px;
 }
 .htmlAreaComponentModule {
     width: 200px; 

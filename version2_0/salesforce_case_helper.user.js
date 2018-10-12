@@ -1,58 +1,76 @@
 // ==UserScript==
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
-// @include     https://bazaarvoice1.my.salesforce.com/*
-// @include     https://bazaarvoice1--e2cp.na3.visual.force.com/*
-// @include     https://bazaarvoice1--c.na3.visual.force.com/*
+// @include     https://na3.salesforce.com/* 
+// @include     https://e2cp.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @resource    Customcss case_helper.css
-// @version     2.1
-// @grant       GM_addStyle
+// @resource  Customcss case_helper.css 
+// @version     2.0
+// @grant   GM_addStyle
 // @grant       GM_getResourceText
 // ==/UserScript==
+
 /*
 Define your signature in the userSignature variable
 Define your SoftServe Signature in the sendToSoftserve variable
 \n is a carriage return (Enter/Return)
 */
-
-
-//if (document.getElementById('cas2_ileinner')){
-    //var caseNumber = document.getElementById('cas2_ileinner').innerText.substring(0,8);
-    //console.log('caseNumber: ',caseNumber);
-//}
-
-//if(document.getElementsByClassName('bPageTitle')[0]){
-    //var caseNumber = document.getElementsByClassName('bPageTitle')[0].innerText.split('').splice(6,8).join('');
-//}
+if(document.getElementsByClassName('bPageTitle')[0]){
+    var caseNumber = document.getElementsByClassName('bPageTitle')[0].innerText.split('').splice(6,8).join('');
+}
 
 // business day calculator
 function businessDaysFromDate(businessDays) {
   var counter = 0, tmp = new Date(), origTime = tmp.getTime();
+  console.log('tmp: ',tmp);
   var yr = tmp.getFullYear();
   var easter = computus(yr);
+  console.log('easter: ',easter);
+  console.log('easter Month: ', easter.getMonth()+1);
+  console.log('easter Day: ', easter.getDay());
   var goodFriday = easter;
   goodFriday.setDate(goodFriday.getDate()-2);
+  console.log('goodFriday: ',goodFriday);
+  console.log('easter: ',easter);
+  console.log('goodFriday Month: ', goodFriday.getMonth()+1);
+  console.log('goodFriday Day: ', goodFriday.getDate());
   var gfM = goodFriday.getMonth()+1;
   var gfD = goodFriday.getDate();
   var gfStr = gfM + '/'+gfD;
   var easterMonday = goodFriday;
   easterMonday.setDate(easterMonday.getDate()+3);
+  console.log('easterMonday: ',easterMonday);
+  console.log('easter: ',easter);
+  console.log('easterMonday Month: ', easterMonday.getMonth()+1);
+  console.log('easterMonday Day: ', easterMonday.getDate());
   var emM = easterMonday.getMonth()+1;
   var emD = easterMonday.getDate();
   var emStr = emM+'/'+emD;
   var ascensionThursday = easterMonday;
   ascensionThursday.setDate(ascensionThursday.getDate()+38);
+  console.log('ascensionThursday: ',ascensionThursday);
+  console.log('easter: ',easter);
+  console.log('ascensionThursday Month: ', ascensionThursday.getMonth()+1);
+  console.log('ascensionThursday Day: ', ascensionThursday.getDate());
   var atM = ascensionThursday.getMonth()+1;
   var atD = ascensionThursday.getDate();
   var atStr = atM+'/'+atD;
   var whitMonday = ascensionThursday;
   whitMonday.setDate(whitMonday.getDate()+11);
+  console.log('whitMonday: ',whitMonday);
+  console.log('easter: ',easter);
+  console.log('whitMonday Month: ', whitMonday.getMonth()+1);
+  console.log('whitMonday Day: ', whitMonday.getDate());
   var wmM = whitMonday.getMonth()+1;
   var wmD = whitMonday.getDate();
   var wmStr = wmM+'/'+wmD;
   var corpusChristi = whitMonday;
   corpusChristi.setDate(corpusChristi.getDate()+10);
+  console.log('corpusChristi: ',corpusChristi);
+  console.log('easter: ',easter);
+  console.log('corpusChristi Month: ', corpusChristi.getMonth()+1);
+  console.log('corpusChristi Day: ', corpusChristi.getDate());
+  console.log('tmp: ',tmp);
   var ccM = corpusChristi.getMonth()+1;
   var ccD = corpusChristi.getDate();
   var ccStr = ccM+'/'+ccD;
@@ -68,6 +86,7 @@ function businessDaysFromDate(businessDays) {
 }
 function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   var dayOfWeek = date.getDay();
+  console.log('dayOfWeek - isBusinessDay: ',dayOfWeek);
   if(dayOfWeek === 0 || dayOfWeek === 6) {
     // Weekend
     console.log('weekend - return false');
@@ -76,8 +95,8 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   // Uncomment out the holiday of your country - it is United States by default
   // United States
   // comment this out if you are chossing another country
-  
-  var holidays = [
+
+  holidays = [
     '12/31+5', // New Year's Day on a saturday celebrated on previous friday
     '1/1',     // New Year's Day
     '1/2+1',   // New Year's Day on a sunday celebrated on next monday
@@ -97,7 +116,8 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
     '12/25',   // Christmas Day
     '12/26+1',  // Christmas Day
   ];
-  
+  console.log('holidaysUS: ',holidays);
+
   // United Kingdom
   /*
   holidays = [
@@ -116,6 +136,7 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   ];
   holidays[12] = gfStr;
   holidays[13] = emStr;
+  console.log('holidaysUk: ',holidays);
   */
 
   // France
@@ -132,8 +153,10 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
     '12/25',   // Christmas Day
     '12/26+1',  // Christmas Day
   ];
+
   holidays[10] = emStr;
   holidays[11] = atStr;
+  console.log('holidaysFr: ', holidays);
   */
 
   // Germany
@@ -158,6 +181,7 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   holidays[15] = atStr;
   holidays[16] = wmStr;
   holidays[17] = ccStr;
+  console.log('holidaysDe: ', holidays);
   */
 
   // Netherlands
@@ -177,6 +201,7 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   holidays[10] = emStr;
   holidays[11] = atStr;
   holidays[12] = wmStr;
+  console.log('holidaysNe: ', holidays);
   */
 
   // Northern Ireland
@@ -201,6 +226,7 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   ];
   holidays[16] = gfStr;
   holidays[17] = emStr;
+  console.log('holidaysIr: ', holidays);
   */
   // Australia
   /*
@@ -224,20 +250,27 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   ];
   holidays[16] = gfStr;
   holidays[17] = emStr;
+  console.log('holidaysAu: ',holidays);
   */
   var dayOfMonth = date.getDate(),
   month = date.getMonth() + 1,
   monthDay = month + '/' + dayOfMonth;
+  console.log('monthDay: ',monthDay);
   if(holidays.indexOf(monthDay)>-1){
+    console.log('monthDay match - return false');
     return false;
   }
   var monthDayDay = monthDay + '+' + dayOfWeek;
+  console.log('monthDayDay: ',monthDayDay);
   if(holidays.indexOf(monthDayDay)>-1){
+    console.log('monthDayDay match - return false');
     return false;
   }
   var weekOfMonth = Math.floor((dayOfMonth - 1) / 7) + 1,
       monthWeekDay = month + '-' + weekOfMonth + '/' + dayOfWeek;
+  console.log('monthWeekDay: ',monthWeekDay);
   if(holidays.indexOf(monthWeekDay)>-1){
+    console.log('monthWeekDay match - return false');
     return false;
   }
   var lastDayOfMonth = new Date(date);
@@ -245,9 +278,12 @@ function isBusinessDay (date,gfStr,emStr,atStr,wmStr,ccStr) {
   lastDayOfMonth.setDate(0);
   var negWeekOfMonth = Math.floor((lastDayOfMonth.getDate() - dayOfMonth - 1) / 7) + 1,
       monthNegWeekDay = month + '~' + negWeekOfMonth + '/' + dayOfWeek;
+  console.log('monthNegWeekDay: ',monthNegWeekDay);
   if(holidays.indexOf(monthNegWeekDay)>-1){
+    console.log('monthNegWeekDay match - return false');
     return false;
   }
+  console.log('No matches - return true');
   return true;
 }
 
@@ -292,6 +328,7 @@ var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturda
 var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 var suffixes = ["st","nd","rd","th","th","th","th","th","th","th","th","th","th","th","th","th","th","th","th","th","st","nd","rd","th","th","th","th","th","th","th","st"];
 var closeDateNice = days[closeDate.getDay()]+' '+months[closeDate.getMonth()]+' '+closeDate.getDate()+suffixes[closeDate.getDate()-1];
+console.log('Close date nice format: ', days[closeDate.getDay()]+' '+months[closeDate.getMonth()]+' '+closeDate.getDate()+suffixes[closeDate.getDate()-1]);
 closeDate = closeDateNice;
 
 // United Kingdom
@@ -311,63 +348,33 @@ closeDate = closeDateNice;
 
 // Australia
 //closeDate = closeDate.toLocaleDateString('en-AU', options);
-var userSignature = "\nBest regards,\nXXXX | Technical Success Manager | 512.551.XXXX\n\n———\nIf you have a critical issue at any time of day or night - defined as a total outage of submission or display on production - please call our support hotline at 888-984-1381 (toll free) and someone will assist you.";
+
+console.log('Close date: ',closeDate);
+var closeSignature = "I will go ahead and mark this ticket as resolved. It will stay open until "+closeDate+", just in case you have any questions. It was great working with you. Have a wonderful day!\n\nThanks,\nJohn Smith\nTechnical Success Manager\no: 512.551.XXXX\n\nNote on Closed cases: replies to Closed cases do not alert the case owner.  If you have any follow up questions please open a new case and reference this case number ("+caseNumber+").";
+var userSignature = "\nBest regards,\nJohn Smith | Technical Success Manager | 512.551.XXXX\n\n———\nIf you have a critical issue at any time of day or night - defined as a total outage of submission or display on production - please call our support hotline at 888-984-1381 (toll free) and someone will assist you.";
 var sendToSoftserve = "Hello SoftServe,\n\nbenchname, PRR/C13, Cluster Prod/Staging, Display code (if applicable)\n\nExternal Communication no\n\nThanks!";
 var newCSS = GM_getResourceText ("Customcss");
-
 //this block runs on all salesforce case pages and all new comments page. Fixes word wrap issue, adds signature buttons and floats WorkIt!
 GM_addStyle (newCSS);
 
 if($('.pageType').html()) {
+    console.log('Page type is: ',$('.pageType').html());
  if($('.pageType').html().substring(0,10) == 'Close Case') {
      $("#00N50000002D2N9").addClass("status_negative");
      $("#00N50000002AgSu").addClass("status_negative");
-     var closeTextArea = document.getElementById("cas16");
-     closeTextArea.style.minWidth = "410px";
-     closeTextArea.style.height = "150px";
      alert("Before closing, make sure that you fill out the Nature of Issue and Solution Type fields with correct information as these may have changed during course of the case!");
  }
 }
-
-//https://bazaarvoice1--c.na3.visual.force.com
-//https://bazaarvoice1--e2cp.na3.visual.force.com
-
-console.log('Hello World!');
-console.log('document.location.origin: ',document.location.origin);
-if(document.location.origin === 'https://bazaarvoice1--c.na3.visual.force.com'){
+if(document.location.origin === 'https://e2cp.na3.visual.force.com'){
     window.addEventListener("load", Greasemonkey_main1, false);
 }
 function Greasemonkey_main1(){
-    //$('.slds-form-element ').attr('id', 'commentButtons');
-    var caseNumber = 0;
-    $("[data-aura-rendered-by='18:0']").attr('id', 'caseNumber');
-    caseNumber = $("#caseNumber").text();
-    //caseNumber = document.getElementById('caseNumber').innerText;
-    console.log('caseNumber: ',caseNumber);
-    var closeSignature = "I will go ahead and mark this ticket as resolved. It will stay open until "+closeDate+", just in case you have any questions. It was great working with you. Have a wonderful day!\n\nThanks,\nXXXX\nTechnical Success Manager\no: 512.551.XXXX\n\nNote on Closed cases: replies to Closed cases do not alert the case owner.  If you have any follow up questions please open a new case and reference this case number ("+caseNumber+").";
-    $("[data-aura-rendered-by='195:0']").attr('id', 'dataSelect');
-    var viewportWidth = $(window).width();
-    console.log('viewportWidth: ',viewportWidth);
-    $("[data-aura-rendered-by='8:0']").width(viewportWidth-243);
-    //$("[data-aura-rendered-by='203:0']").hide();
-    var addCommentDivWidth = $("[data-aura-rendered-by='179:0']").width();
-    $("[data-aura-rendered-by='279:0']").width(addCommentDivWidth-30);
-    //$("[data-aura-rendered-by='347:0']").find('input[type=checkbox]').each(function () {
-             //$(this).prop("checked",true);
-             //this.checked = true;
-    //});
-    //var radioCounter = 0;
-    //$("[data-aura-rendered-by='347:0']").find('input[type=radio]').each(function () {
-        //console.log('$(this).val() = ',$(this).val());
-        //if(radioCounter%2==0){
-                 //this.checked = true;
-                 //$(this).prop("checked",true);
-                 //this.val('true');
-        //}
-        //radioCounter++;
-    //});
-    var commentRow = document.getElementById('dataSelect');
-    //var commentRow = document.getElementById('pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:cannedPBSI:cannedOP');
+    if(document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea")){
+        console.log('Add Comment Text area field present');
+    } else {
+        console.log('Add Comment Text area field not present');
+    }
+    var commentRow = document.getElementById('pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:cannedPBSI:cannedOP');
     var signatureButton = document.createElement('input');
     signatureButton.id = 'signatureButton';
     signatureButton.setAttribute('class','btn');
@@ -386,37 +393,30 @@ function Greasemonkey_main1(){
     closeButton.setAttribute('type','button');
     closeButton.setAttribute('name','closeButton');
     closeButton.setAttribute('value','Closing Signature');
-    $("[data-aura-rendered-by='279:0']").attr('id', 'textAreaTarget');
-    //var textAreaTarget = document.getElementById('textAreaTarget');
     commentRow.insertBefore(signatureButton,null);
     commentRow.insertBefore(softserveButton,null);
     commentRow.insertBefore(closeButton,null);
-    //$("[data-aura-rendered-by='320:0']").attr('id', 'textAreaTarget');
     document.getElementById('softserveButton').onclick = function(){
-        console.log('ss button clicked');
-        document.getElementById("textAreaTarget").value += sendToSoftserve;
-        //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += sendToSoftserve;
-        //if (document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:publicPBSI:IsPublic_Checkbox").value == "on"){
-            //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:publicPBSI:IsPublic_Checkbox").click();
-        //}
-        //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:1:customFieldsPBS:j_id90:0:j_id91").value = "Awaiting TSE Assignment";
+        document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += sendToSoftserve;
+        console.log('The value of the public checkbox is: ',document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:publicPBSI:IsPublic_Checkbox").value);
+        if (document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:publicPBSI:IsPublic_Checkbox").value == "on"){
+            console.log('The comment is public, need to toggle it to priviate');
+            document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:publicPBSI:IsPublic_Checkbox").click();
+        }
+        document.getElementById("pg:addCommentF:addCommentPB:rptOrder:1:customFieldsPBS:j_id90:0:j_id91").value = "Awaiting TSE Assignment";
     };
     document.getElementById('signatureButton').onclick = function(){
         if(userSignature.indexOf('XXXX')>-1){
           alert("You haven't changed the default user signature yet!");
         }
-        console.log('signature button clicked');
-        document.getElementById("textAreaTarget").value += userSignature;
-        //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += userSignature;
+        document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += userSignature;
     };
     document.getElementById('closeButton').onclick = function(){
         if(closeSignature.indexOf('XXXX')>-1){
-          alert("You haven't changed the default close signature yet!");
+          alert("You haven't changed the default user signature yet!");
         }
-        console.log('close signature button clicked');
-        document.getElementById("textAreaTarget").value += closeSignature;
-        //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += closeSignature;
-        //document.getElementById("pg:addCommentF:addCommentPB:rptOrder:1:customFieldsPBS:j_id90:0:j_id91").value = "Resolved";
+        document.getElementById("pg:addCommentF:addCommentPB:rptOrder:0:addCommentPBS:addCommentPBSI:Comment_TextArea").value += closeSignature;
+        document.getElementById("pg:addCommentF:addCommentPB:rptOrder:1:customFieldsPBS:j_id90:0:j_id91").value = "Resolved";
     };
 }
 //end block
@@ -427,11 +427,13 @@ if(commentDescriptionDiv){
     commentTextArea.style.width = window.innerWidth - 849 + "px";
     commentTextArea.style.minWidth = "425px";
     commentTextArea.style.height = "300px";
+    console.log('Add Comment Description element present');
     commentDescriptionDiv.style.maxWidth = window.innerWidth - 316 + "px";
     commentDescriptionDiv.style.width = window.innerWidth - 316 + "px";
     commentDescriptionDiv.style.wordBreak = "break-all";
     commentDescriptionDiv.style.wordWrap = "break-word";
     commentDescriptionDiv.style.fontSize = "small";
+    //commentDescriptionDiv.classList.add("beautified_comment");
     $(window).resize(function () {
         commentDescriptionDiv.style.maxWidth = window.innerWidth - 316 + "px";
         commentDescriptionDiv.style.width = window.innerWidth - 316 + "px";
@@ -441,7 +443,8 @@ if(commentDescriptionDiv){
     console.log('Add Comment Description element not present');
 }
 //This block will run on all Support Case Types
-
+//console.log("document.getElementById('RecordType_ileinner').innerHTML:",document.getElementById('RecordType_ileinner').innerHTML);
+//console.log("cas17_ilecell column number: ",$(".cas17_ilecell").index());
 if(document.getElementById('RecordType_ileinner')){
     console.log('Record Type Field is present');
     if(document.getElementById('RecordType_ileinner').innerHTML.substr(0,12) === "Support Team"||document.getElementById('RecordType_ileinner').innerHTML.substr(0,15) === "Product Support"){
@@ -468,6 +471,8 @@ function Greasemonkey_main() {
     document.body.addEventListener( 'change', function ( event ) {
         if( event.srcElement.id == 'selectFontSize' ) {
             var newSize = document.getElementById('selectFontSize').value;
+            console.log('Font Size selected: ',newSize);
+            console.log('Font Size currently of beautycomment elements: ',$('.beautified_comment').css('font-size'));
             $('.beautified_comment').css('font-size',newSize);
         }
     } );
@@ -484,6 +489,11 @@ function Greasemonkey_main() {
         var caseNotes = document.getElementById('00N50000002AHM3_ileinner');
         var supportNotes = document.getElementById('00N50000001yx07_ileinner');
         var testNegField = document.getElementById('fakeFake');
+        if (testNegField){
+            console.log('TestNegField yielded true!');
+        }else {
+            console.log('TestNegField went to the else');
+        }
         //update nature of issue, root cause, and related product fields
         console.log('Checking fields . . .');
         // Nature of Issue
@@ -522,7 +532,7 @@ function Greasemonkey_main() {
         // Primary TSM CV2
         if (primaryTSMConversationsField){
             console.log('Primary TSM CV2 Field is present');
-            if (primaryTSMConversationsField.innerHTML === "" || primaryTSMConversationsField.innerHTML === "&nbsp" || primaryTSMConversationsField.innerHTML === " ") {
+            if (primaryTSMConversationsField.innerHTML === "") {
                 console.log('No Primary Conversations TSM');
             } else {
                 $('#00N50000009s6XR_ileinner').addClass("status_positive");
@@ -533,7 +543,7 @@ function Greasemonkey_main() {
         // Primary TSM PRR
         if (primaryTSMPRRField){
             console.log('Primary TSM PRR Field is present');
-            if (primaryTSMPRRField.innerHTML === "" || primaryTSMPRRField.innerHTML === "&nbsp" || primaryTSMPRRField.innerHTML === " ") {
+            if (primaryTSMPRRField.innerHTML === "") {
                 console.log('No Primary PRR TSM');
             } else {
                 $('#00N50000009s6XW_ileinner').addClass("status_positive");
@@ -589,17 +599,28 @@ function Greasemonkey_main() {
         //update last comment, contact name, description
         $("#cas3_ileinner").addClass("beautified_comment");
         $("#cas15_ileinner").addClass("beautified_comment");
+        //$("#cas15_ileinner").css("word-wrap", "break-word");
         var maxWidth = window.innerWidth - 466;
         var maxWidthStr = maxWidth+"px";
+        console.log("maxWidth: ",maxWidthStr);
+        //$("#cas15_ileinner").css("max-width", maxWidthStr);
         // Move Description to it's own table
         var descTD = document.getElementById("cas15_ilecell");
         var rowIndex = descTD.cellIndex;
+        console.log('The position of the description row is: ',rowIndex);
+        console.log("Description should be on its own table - move it down");
         var descRow = descTD.parentElement;
+        console.log("descRow: ",descRow);
         var labelTD = descRow.cells[rowIndex-1];
+        console.log('labelTD: ',labelTD);
         var TDTR = descTD.parentElement;
+        console.log('TDTR: ',TDTR);
         var TRTB = TDTR.parentElement;
+        console.log('TRTB: ',TRTB);
         var TBTable = TRTB.parentElement;
+        console.log('TBTable: ',TBTable);
         var TableDiv = TBTable.parentElement;
+        console.log('TableDiv: ',TableDiv);
         // create a new table and append to original
         var tableDesc = document.createElement('table');
         tableDesc.classList.add('detailList');
@@ -618,6 +639,7 @@ function Greasemonkey_main() {
         document.getElementById('cas15_ileinner').style.maxWidth = window.innerWidth - 525 + "px";
         document.getElementById('cas15_ileinner').style.width = window.innerWidth - 525 + "px";
         document.getElementById('cas15_ileinner').style.minWidth = "465px";
+        //document.getElementById('cas15_ileinner').style.wordBreak = "break-all";
         document.getElementById('cas15_ileinner').style.wordWrap = "break-word";
         $(window).resize(function () {
             document.getElementById('ep').style.maxWidth = window.innerWidth - 416 + "px";

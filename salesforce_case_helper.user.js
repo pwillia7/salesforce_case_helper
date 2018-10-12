@@ -2,8 +2,8 @@
 // @name        new_salesforce_case_helper
 // @namespace   salesforce.com
 // @include     https://na3.salesforce.com/* 
-// @include     https://bazaarvoice1--e2cp.na3.visual.force.com/*
 // @include     https://e2cp.na3.visual.force.com/*
+// @include     https://c.na3.visual.force.com/*
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @resource    Customcss case_helper.css
 // @version     2.1
